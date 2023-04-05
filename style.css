@@ -1,0 +1,127 @@
+:root {
+  --background-color: #cdc1b5;
+  --border-color: #bbada0;
+  --tile-border-color: #bbada0;
+
+  --x2: #eee4da;
+  --x4: #ece0ca;
+  --x8: #f4b17a;
+  --x16: #f59575;
+  --x32: #f57c5f;
+  --x64: #f65d3b;
+  --x128: #edce71;
+  --x256: #edcc63;
+  --x512: #edc651;
+  --x1024: #eec744;
+  --x2048: #ecc230;
+  --x4096: #fe3d3d;
+  --x8192: #ff2020;
+  --x16384: #ff0000;
+
+  --grey-text: #727371;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+hr {
+  width: 500px;
+}
+
+#board {
+  width: 400px;
+  height: 400px;
+
+  background-color: var(--background-color);
+  border: 6px solid var(--border-color);
+  border-radius: 8px;
+
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tile {
+  width: 90px;
+  height: 90px;
+  border: 5px solid var(--tile-border-color);
+
+  font-size: 40px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*Colored tile*/
+.x2 {
+  background-color: var(--x2);
+  color: var(--grey-text);
+}
+
+.x4 {
+  background-color: var(--x4);
+  color: var(--grey-text);
+}
+
+.x8 {
+  background-color: var(--x8);
+  color: white;
+}
+
+.x16 {
+  background-color: var(--x16);
+  color: white;
+}
+
+.x32 {
+  background-color: var(--x32);
+  color: white;
+}
+
+.x64 {
+  background-color: var(--x64);
+  color: white;
+}
+
+.x128 {
+  background-color: var(--x128);
+  color: white;
+}
+
+.x256 {
+  background-color: var(--x256);
+  color: white;
+}
+
+.x512 {
+  background-color: var(--x512);
+  color: white;
+}
+
+.x1024 {
+  background-color: var(--x1024);
+  color: white;
+}
+
+.x2048 {
+  background-color: var(--x2048);
+  color: white;
+}
+
+.x4096 {
+  background-color: var(--x4096);
+  color: white;
+}
+
+.x8192 {
+  background-color: var(--x8192);
+  color: white;
+}
+
+.x16384 {
+  background-color: var(--x16384);
+  color: white;
+}
