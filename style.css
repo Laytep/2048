@@ -31,28 +31,53 @@ hr {
 }
 
 #board {
-  width: 400px;
-  height: 400px;
+  position: relative;
+  width: 412.5px;
+  height: 412.5px;
+  padding: 5px;
 
   background-color: var(--background-color);
   border: 6px solid var(--border-color);
   border-radius: 8px;
 
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Creates 4 equal columns */
+  grid-gap: 5px; /* Adjust the gap to create space between tiles */
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-size: 1015px, 1015px;
+    background: linear-gradient(
+          to right,
+          var(--border-color) 5px,
+          transparent 5px
+        )
+        0 0 / 105px 100%,
+      linear-gradient(to bottom, var(--border-color) 5px, transparent 5px) 0 0 /
+        100% 105px;
+    z-index: 0;
+  }
 }
 
 .tile {
-  width: 90px;
-  height: 90px;
-  border: 5px solid var(--tile-border-color);
+  position: relative; /* Above the grid lines */
+  z-index: 1;
+  box-sizing: border-box;
+  width: 100px;
+  height: 100px;
 
   font-size: 40px;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: transform 0.2s ease-in-out;
 }
 
 /*Colored tile*/
