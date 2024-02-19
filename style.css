@@ -32,13 +32,13 @@ hr {
 
 #board {
   position: relative;
-  width: 412.5px;
-  height: 412.5px;
+  width: 415px;
+  height: 415px;
   padding: 5px;
 
   background-color: var(--background-color);
-  border: 6px solid var(--border-color);
-  border-radius: 8px;
+  border: 5px solid var(--border-color);
+  border-radius: 10px;
 
   margin: 0 auto;
   display: grid;

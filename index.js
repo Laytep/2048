@@ -82,18 +82,22 @@ function updateTile(tile, num) {
 }
 
 function renderMove() {
-  scoreElement.innerHTML = score;
-  boardElement.innerHTML = "";
+  scoreElement.textContent = score;
 
   for (let r = 0; r < rows; r++) {
     for (let c = 0; c < columns; c++) {
-      let tile = document.createElement("div");
-
-      tile.id = r.toString() + "-" + c.toString();
+      let tileId = r.toString() + "-" + c.toString();
+      let tile = document.getElementById(tileId);
       let num = board[r][c];
-      updateTile(tile, num);
 
-      boardElement.append(tile);
+      if (!tile) {
+        // Если плитка не существует, создаем новую
+        tile = document.createElement("div");
+        tile.id = tileId;
+        boardElement.append(tile);
+      }
+
+      updateTile(tile, board[r][c]);
     }
   }
   setTwo();
@@ -118,7 +122,6 @@ function animateTileMovement(tile, oldRow, oldColumn, newRow, newColumn) {
         () => {
           tileElement.style.transition = "";
           tileElement.style.transform = "";
-          animationRunning = false;
           resolve();
         },
         { once: true }
@@ -157,6 +160,10 @@ document.addEventListener("keyup", (e) => {
     });
   }
 });
+
+function moveTiles(direction) {
+  let movement = [];
+}
 
 function down() {
   transpose(board);
