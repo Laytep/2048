@@ -60,24 +60,21 @@ function setTwo() {
     if (board[r][c] === 0) {
       board[r][c] = 2;
       let tile = document.getElementById(r.toString() + "-" + c.toString());
-      tile.innerText = "2";
-      tile.classList.add("x2");
+      tile.classList.add("new-tile");
+      updateTile(tile, 2);
       found = true;
     }
   }
 }
 
 function updateTile(tile, num) {
-  tile.innerText = "";
-  tile.classList.value = "";
-  tile.classList.add("tile");
-  if (num > 0) {
-    tile.innerText = num;
-    if (num <= 8192) {
-      tile.classList.add("x" + num.toString());
-    } else {
-      tile.classList.add("x16384");
-    }
+  const isNewTile = tile.classList.contains("new-tile");
+  tile.textContent = num > 0 ? num.toString() : "";
+  tile.className = "tile";
+  tile.classList.add("x" + num.toString());
+
+  if (isNewTile) {
+    tile.classList.add("tile-new");
   }
 }
 
@@ -114,19 +111,24 @@ function animateTileMovement(tile, oldRow, oldColumn, newRow, newColumn) {
     const translateX = newPosition.left - oldPosition.left;
     const translateY = newPosition.top - oldPosition.top;
 
-    requestAnimationFrame(() => {
-      tileElement.style.transition = "transform 0.2s ease-in-out";
-      tileElement.style.transform = `translate(${translateX}px, ${translateY}px)`;
-      tileElement.addEventListener(
-        "transitionend",
-        () => {
-          tileElement.style.transition = "";
-          tileElement.style.transform = "";
-          resolve();
-        },
-        { once: true }
-      );
-    });
+    if (!tileElement.classList.contains("new-tile")) {
+      requestAnimationFrame(() => {
+        tileElement.style.transition = "transform 0.2s ease-in-out";
+        tileElement.style.transform = `translate(${translateX}px, ${translateY}px)`;
+        tileElement.addEventListener(
+          "transitionend",
+          () => {
+            tileElement.style.transition = "";
+            tileElement.style.transform = "";
+            tileElement.classList.remove("new-tile");
+            resolve();
+          },
+          { once: true }
+        );
+      });
+    } else {
+      resolve();
+    }
   });
 }
 

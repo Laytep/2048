@@ -77,7 +77,19 @@ hr {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.2s ease-in-out;
+}
+
+.tile-new {
+  animation: pop-in 0.2s ease-in-out;
+}
+
+@keyframes pop-in {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
 /*Colored tile*/
