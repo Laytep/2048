@@ -97,47 +97,46 @@ function renderMove() {
       updateTile(tile, board[r][c]);
     }
   }
-  setTwo();
 }
 
 document.addEventListener("keyup", async (e) => {
-  if (animationRunning) {
-    return;
+  if (animationRunning) return;
+  animationRunning = true;
+
+  let movements = [];
+  switch (e.code) {
+    case "ArrowLeft":
+      movements = left();
+      break;
+    case "ArrowRight":
+      movements = right();
+      break;
+    case "ArrowUp":
+      movements = up();
+      break;
+    case "ArrowDown":
+      movements = down();
+      break;
+    default:
+      animationRunning = false;
+      return;
   }
 
-  if (e.code === "ArrowLeft") {
-    let movements = left();
-    if (movements.length > 0) {
-      await animateMovements(movements);
-    }
+  if (movements.length > 0) {
+    await animateMovements(movements, () => {
+      renderMove();
+      setTwo();
+      animationRunning = false;
+    });
+  } else {
     renderMove();
-  } else if (e.code === "ArrowRight") {
-    let movements = right();
-    if (movements.length > 0) {
-      await animateMovements(movements);
-    }
-    renderMove();
-  } else if (e.code === "ArrowDown") {
-    let movements = down();
-    if (movements.length > 0) {
-      await animateMovements(movements);
-    }
-    renderMove();
-  } else if (e.code === "ArrowUp") {
-    let movements = up();
-    console.log("Animation Running:", movements);
-    if (movements.length > 0) {
-      await animateMovements(movements);
-    }
-    renderMove();
+    setTwo();
   }
+
   animationRunning = false;
 });
 
 function down() {
-  if (animationRunning) return;
-  animationRunning = true;
-
   transpose(board);
   let movements = right();
   transpose(board);
@@ -152,9 +151,6 @@ function down() {
 }
 
 function up() {
-  if (animationRunning) return;
-  animationRunning = true;
-
   transpose(board);
   let movements = left();
   transpose(board);
@@ -171,23 +167,42 @@ function up() {
 function left() {
   let movements = [];
 
-  for (let r = 0; r < rows; r++) {
-    let row = board[r].slice();
-    row = removeZeroFromRow(row, "left");
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    let row = board[rowIndex].slice();
+    let rowWithoutZeros = removeZeroFromRow(row.slice(), "left");
 
-    for (let c = 0; c < row.length; c++) {
-      if (row[c] === row[c + 1]) {
-        movements.push({ tile: row[c] * 2, from: [r, c + 1], to: [r, c] });
+    for (let c = 0, targetIndex = 0; c < row.length; c++) {
+      if (row[c] === 0) continue;
 
-        row[c] = row[c] * 2;
-        row[c + 1] = 0;
-        score += row[c];
+      function moveTile(tile, from, to) {
+        movements.push({ tile, from, to });
       }
-      row = removeZeroFromRow(row, "left");
-      row = addZeroToRow(row, "left");
 
-      board[r] = row;
+      let targetPos = targetIndex;
+      if (rowWithoutZeros[targetIndex] === rowWithoutZeros[targetIndex + 1]) {
+        movements.push({
+          tile: row[c],
+          from: [rowIndex, c],
+          to: [rowIndex, targetPos],
+        });
+        movements.push({
+          tile: row[c] * 2,
+          from: [rowIndex, c + 1],
+          to: [rowIndex, targetPos],
+        });
+        rowWithoutZeros[targetIndex] *= 2;
+        rowWithoutZeros[targetIndex + 1] = 0;
+        score += rowWithoutZeros[targetIndex];
+        c++;
+      } else {
+        moveTile(row[c], [rowIndex, c], [rowIndex, targetPos]);
+      }
+      targetIndex++;
     }
+
+    row = removeZeroFromRow(rowWithoutZeros.slice(), "left");
+    row = addZeroToRow(row, "left");
+    board[rowIndex] = row;
   }
   return movements;
 }
@@ -197,7 +212,10 @@ function right() {
 
   for (let r = 0; r < rows; r++) {
     let row = board[r].slice();
+    let originalRow = row.slice();
     row = removeZeroFromRow(row, "right");
+
+    let newRow = [];
     for (let c = row.length - 1; c >= 0; c--) {
       if (row[c] === row[c - 1]) {
         movements.push({ tile: row[c] * 2, from: [r, c - 1], to: [r, c] });

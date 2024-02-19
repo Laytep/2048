@@ -7,17 +7,32 @@ export function animateTileMovement(
 ) {
   return new Promise((resolve) => {
     const tileElement = document.getElementById(`${oldRow}-${oldColumn}`);
+
+    if (!tileElement) {
+      resolve();
+      return;
+    }
+
     const oldPosition = tileElement.getBoundingClientRect();
-    const newPosition = document
-      .getElementById(`${newRow}-${newColumn}`)
-      .getBoundingClientRect();
+    const newTileElement = document.getElementById(`${newRow}-${newColumn}`);
+
+    if (!newTileElement) {
+      resolve();
+      return;
+    }
+    const newPosition = newTileElement.getBoundingClientRect();
 
     const translateX = newPosition.left - oldPosition.left;
     const translateY = newPosition.top - oldPosition.top;
 
+    if (translateX === 0 && translateY === 0) {
+      resolve();
+      return;
+    }
+
     if (!tileElement.classList.contains("new-tile")) {
       requestAnimationFrame(() => {
-        tileElement.style.transition = "transform 0.2s ease-in-out";
+        tileElement.style.transition = "transform 0.15s ease-out";
         tileElement.style.transform = `translate(${translateX}px, ${translateY}px)`;
         tileElement.addEventListener(
           "transitionend",
@@ -36,7 +51,7 @@ export function animateTileMovement(
   });
 }
 
-export function animateMovements(movements) {
+export function animateMovements(movements, callback) {
   let animations = movements.map((movement) => {
     return animateTileMovement(
       movement.tile,
@@ -46,5 +61,7 @@ export function animateMovements(movements) {
       movement.to[1]
     );
   });
-  return Promise.all(animations);
+  return Promise.all(animations).then(() => {
+    callback(); // Вызывается после завершения всех анимаций
+  });
 }
