@@ -1,5 +1,5 @@
-import { animateMovements } from "./animation.js";
-import { addZeroToRow, removeZeroFromRow, transpose } from "./game.js";
+import { animateMovements } from "./src/animation.js";
+import { addZeroToRow, removeZeroFromRow, transpose } from "./src/game.js";
 
 const boardElement = document.getElementById("board");
 const scoreElement = document.getElementById("score");
