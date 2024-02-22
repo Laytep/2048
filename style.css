@@ -175,67 +175,67 @@ hr {
 
 .tile.tile-8 .tile-inner {
   background: var(--x8);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-16 .tile-inner {
   background: var(--x16);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-32 .tile-inner {
   background: var(--x32);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-64 .tile-inner {
   background: var(--x64);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-128 .tile-inner {
   background: var(--x128);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-256 .tile-inner {
   background: var(--x256);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-512 .tile-inner {
   background: var(--x512);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-1024 .tile-inner {
   font-size: 35px;
   background: var(--x1024);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-2048 .tile-inner {
   font-size: 35px;
   background: var(--x2048);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-4096 .tile-inner {
   font-size: 35px;
   background: var(--x4096);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-8192 .tile-inner {
   font-size: 35px;
   background: var(--x8192);
-  color: var(--background-color);
+  color: #fff;
 }
 
 .tile.tile-16384 .tile-inner {
   font-size: 30px;
   background: var(--x16384);
-  color: var(--background-color);
+  color: #fff;
 }
 
 /* Responsive Design */

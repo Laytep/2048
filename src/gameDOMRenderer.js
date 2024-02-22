@@ -4,6 +4,8 @@ export class GameDOMRenderer {
     this.scoreContainer = document.querySelector(".score-container");
     this.bestContainer = document.querySelector(".best-container");
     this.messageContainer = document.querySelector(".game-message");
+
+    this.score = 0;
   }
 
   actuate(grid, metadata) {
@@ -18,6 +20,9 @@ export class GameDOMRenderer {
         });
       });
     });
+
+    this.updateScore(metadata.score);
+    this.updateBestScore(metadata.bestScore);
 
     if (metadata.terminated) {
       if (metadata.over) {
@@ -46,7 +51,8 @@ export class GameDOMRenderer {
 
     let classes = ["tile", "tile-" + tile.value, positionClass];
 
-    console.log(wrapper);
+    if (tile.value > 2048) classes.push("tile-super");
+
     this.applyClasses(wrapper, classes);
 
     inner.classList.add("tile-inner");
@@ -55,15 +61,15 @@ export class GameDOMRenderer {
     if (tile.previousPosition) {
       //Check that the tile gets rendered in the previous position first
       window.requestAnimationFrame(() => {
-        classes[2] = self.positionClass({ x: tile.x, y: tile.y });
-        self.applyClasses(wrapper, classes); //Update the position
+        classes[2] = this.positionClass({ x: tile.x, y: tile.y });
+        this.applyClasses(wrapper, classes); //Update the position
       });
     } else if (tile.mergedFrom) {
       classes.push("tile-merged");
       this.applyClasses(wrapper, classes);
 
       //Render the tiles that merged
-      this.mergedFrom.forEach((merged) => {
+      tile.mergedFrom.forEach((merged) => {
         this.addTile(merged);
       });
     } else {
@@ -77,12 +83,7 @@ export class GameDOMRenderer {
   }
 
   applyClasses(element, classes) {
-    if (!element || !Array.isArray(classes)) {
-      return;
-    }
-    classes.forEach((className) => {
-      element.classList.add(className);
-    });
+    element.setAttribute("class", classes.join(" "));
   }
 
   normalizePosition(position) {
@@ -105,5 +106,26 @@ export class GameDOMRenderer {
   clearMessage() {
     this.messageContainer.classList.remove("game-won");
     this.messageContainer.classList.remove("game-over");
+  }
+
+  updateScore(score) {
+    this.clearContainer(this.scoreContainer);
+
+    let difference = score - this.score;
+    this.score = score;
+
+    this.scoreContainer.textContent = this.score;
+
+    if (difference > 0) {
+      let addition = document.createElement("div");
+      addition.classList.add("score-addition");
+      addition.textContent = "+" + difference;
+
+      this.scoreContainer.appendChild(addition);
+    }
+  }
+
+  updateBestScore(bestScore) {
+    this.bestContainer.textContent = bestScore;
   }
 }
