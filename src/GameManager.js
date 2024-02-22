@@ -1,4 +1,5 @@
 import { Grid } from "./Grid.js";
+import { Tile } from "./Tile.js";
 
 export class GameManager {
   constructor(
@@ -36,12 +37,19 @@ export class GameManager {
       this.keepPlaying = false;
 
       // Add the initial tiles
-      addStartTiles();
+      this.addStartTiles();
     }
 
     // Update the DOM
-    actuate();
+    this.actuate();
   }
+
+  addStartTiles() {
+    for (let i = 0; i < this.startTiles; i++) {
+      this.addRandomTile();
+    }
+  }
+
   // Restart the game
   restart() {
     console.log("restart");
@@ -53,23 +61,24 @@ export class GameManager {
   // Return true if the game is lost, or has won and the user hasn't kept playing
 
   // Set up the initial tiles to start the game with
-  addStartTiles() {
-    for (let i = 0; i < this.startTiles; i++) {
-      this.addRandomTile();
-    }
-  }
+
   // Adds a tile in a random position
   addRandomTile() {
-    if (this.grid.cellAvailable()) {
+    if (this.grid.cellsAvailable()) {
       let value = Math.random() < 0.9 ? 2 : 4;
       let tile = new Tile(this.grid.randomAvailableCell(), value);
-
       this.grid.insertTile(tile);
     }
   }
   // Sends the updated grid to the GameDOMRenderer.js
   actuate() {
-    GameDOMRenderer.actuate(this.grid, {});
+    this.gameDOMRenderer.actuate(this.grid, {
+      score: this.score,
+      over: this.over,
+      won: this.won,
+      // bestScore: this.storageManager.getBestScore(),
+      // terminated: this.isGameTerminated(),
+    });
   }
   // Clear the state when the game is over (game over only, not win)
 

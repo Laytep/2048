@@ -19,9 +19,9 @@ export class Grid {
   }
 
   randomAvailableCell() {
-    let cells = this.availableCell();
+    let cells = this.availableCells();
 
-    if (cells.legth) {
+    if (cells.length) {
       return cells[Math.floor(Math.random() * cells.length)];
     }
   }
@@ -57,11 +57,11 @@ export class Grid {
   }
 
   cellOccupied(cell) {
-    return !!cellContent(cell);
+    return !!this.cellContent(cell);
   }
 
   cellContent(cell) {
-    if (withinBounds(cell)) {
+    if (this.withinBounds(cell)) {
       return this.cells[cell.x][cell.y];
     } else {
       return null;
