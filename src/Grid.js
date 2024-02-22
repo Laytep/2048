@@ -1,17 +1,34 @@
+import { Tile } from "./Tile.js";
+
 export class Grid {
   constructor(size, previousState) {
     this.size = size;
-    this.cells = previousState ? previousState : this.empty();
+    this.cells = previousState ? this.fromState(previousState) : this.empty();
   }
 
   empty() {
     let cells = [];
 
-    for (let r = 0; r < this.size; r++) {
-      let row = (cells[r] = []);
+    for (let x = 0; x < this.size; x++) {
+      let row = (cells[x] = []);
 
-      for (let c = 0; c < this.size; c++) {
+      for (let y = 0; y < this.size; y++) {
         row.push(null);
+      }
+    }
+
+    return cells;
+  }
+
+  fromState(state) {
+    let cells = [];
+
+    for (let x = 0; x < this.size; x++) {
+      let row = (cells[x] = []);
+
+      for (let y = 0; y < this.size; y++) {
+        let tile = state[x][y];
+        row.push(tile ? new Tile(tile.position, tile.value) : null);
       }
     }
 
@@ -29,9 +46,9 @@ export class Grid {
   availableCells() {
     let cells = [];
 
-    this.eachCell((r, c, tile) => {
+    this.eachCell((x, y, tile) => {
       if (!tile) {
-        cells.push({ x: r, y: c });
+        cells.push({ x: x, y: y });
       }
     });
 
@@ -40,20 +57,21 @@ export class Grid {
 
   // Call callback for every cell
   eachCell(callback) {
-    for (let r = 0; r < this.size; r++) {
-      for (let c = 0; c < this.size; c++) {
-        callback(r, c, this.cells[r][c]);
+    for (let x = 0; x < this.size; x++) {
+      for (let y = 0; y < this.size; y++) {
+        callback(x, y, this.cells[x][y]);
       }
     }
   }
 
   // Check if there are any cells available
+
   cellsAvailable() {
     return !!this.availableCells().length;
   }
 
   cellAvailable(cell) {
-    return this.cellOccupied(cell);
+    return !this.cellOccupied(cell); // Notice the negation operator (!) here
   }
 
   cellOccupied(cell) {
@@ -83,5 +101,22 @@ export class Grid {
       position.y >= 0 &&
       position.y < this.size
     );
+  }
+
+  serialize() {
+    let cellState = [];
+
+    for (let x = 0; x < this.size; x++) {
+      let row = (cellState[x] = []);
+
+      for (let y = 0; y < this.size; y++) {
+        row.push(this.cells[x][y] ? this.cells[x][y].serialize() : null);
+      }
+    }
+
+    return {
+      size: this.size,
+      cells: cellState,
+    };
   }
 }
