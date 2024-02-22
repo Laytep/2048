@@ -56,7 +56,7 @@ export class GameDOMRenderer {
       //Check that the tile gets rendered in the previous position first
       window.requestAnimationFrame(() => {
         classes[2] = self.positionClass({ x: tile.x, y: tile.y });
-        self.applyClasses(wrapper, classes);
+        self.applyClasses(wrapper, classes); //Update the position
       });
     } else if (tile.mergedFrom) {
       classes.push("tile-merged");
@@ -68,8 +68,12 @@ export class GameDOMRenderer {
       });
     } else {
       classes.push("tile-new");
-      this.applyClasses(wrapper.class);
+      this.applyClasses(wrapper, classes);
     }
+
+    wrapper.appendChild(inner);
+
+    this.tileContainer.appendChild(wrapper);
   }
 
   applyClasses(element, classes) {
@@ -87,7 +91,7 @@ export class GameDOMRenderer {
 
   positionClass(position) {
     position = this.normalizePosition(position);
-    return "tile-poistion-" + position.x + "-" + position.y;
+    return "tile-position-" + position.x + "-" + position.y;
   }
 
   message(won) {
@@ -96,5 +100,10 @@ export class GameDOMRenderer {
 
     this.messageContainer.classList.add(type);
     this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+  }
+
+  clearMessage() {
+    this.messageContainer.classList.remove("game-won");
+    this.messageContainer.classList.remove("game-over");
   }
 }
