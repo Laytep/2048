@@ -1,20 +1,20 @@
 export class GameManager {
   constructor(
     gridSize,
-    gameKeyboardListener,
+    GameKeyboardListener,
     gameDOMRenderer,
-    localStorageSaver
+    LocalStorageSaver
   ) {
     this.gridSize = gridSize;
-    this.gameKeyboardListener = gameKeyboardListener;
+    this.gameKeyboardListener = new GameKeyboardListener();
     this.gameDOMRenderer = gameDOMRenderer;
-    this.localStorageSaver = localStorageSaver;
+    this.localStorageSaver = new LocalStorageSaver();
 
     this.startTiles = 2;
 
     this.gameKeyboardListener.on("move", this.move.bind(this));
-    this.inputManager.on("restart", this.restart.bind(this));
-    this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
+    this.gameKeyboardListener.on("restart", this.restart.bind(this));
+    this.gameKeyboardListener.on("keepPlaying", this.keepPlaying.bind(this));
 
     this.setup();
   }
@@ -29,9 +29,13 @@ export class GameManager {
     }
   }
   // Restart the game
-
+  restart() {
+    console.log("restart");
+  }
   // Keep playing after winning (allows going over 2048)
-
+  keepPlaying() {
+    console.log("keep Playing");
+  }
   // Return true if the game is lost, or has won and the user hasn't kept playing
 
   // Set up the game
@@ -52,6 +56,9 @@ export class GameManager {
   // Save all tile positions and remove merger info
 
   // Move a tile and its representation
-
+  move(direction) {
+    // Logic to handle movement
+    console.log("Moving in direction:", direction);
+  }
   // Move tiles on the grid in the specified direction
 }

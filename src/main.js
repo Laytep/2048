@@ -1,15 +1,15 @@
 import { GameManager } from "./GameManager.js";
-import { localStorageSaver } from "./LocalStorageSaver.js";
+import { LocalStorageSaver } from "./LocalStorageSaver.js";
 import { gameDOMRenderer } from "./gameDOMRenderer.js";
-import { gameKeyboardListener } from "./gameKeyboardListener.js";
+import { GameKeyboardListener } from "./gameKeyboardListener.js";
 
 function startGame() {
   const gridSize = 4;
   new GameManager(
     gridSize,
-    gameKeyboardListener,
+    GameKeyboardListener,
     gameDOMRenderer,
-    localStorageSaver
+    LocalStorageSaver
   );
 }
 

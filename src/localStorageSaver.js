@@ -1,3 +1,5 @@
-export function localStorageSaver() {
-  return "0";
+export class LocalStorageSaver {
+  constructor() {}
+
+  getGameState() {}
 }
