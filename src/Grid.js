@@ -8,7 +8,7 @@ export class Grid {
     let cells = [];
 
     for (let r = 0; r < this.size; r++) {
-      let row = (cells[x] = []);
+      let row = (cells[r] = []);
 
       for (let c = 0; c < this.size; c++) {
         row.push(null);

@@ -1,16 +1,15 @@
-import { GameDOMRenderer } from "./GameDOMRenderer";
-import { Grid } from "./Grid";
+import { Grid } from "./Grid.js";
 
 export class GameManager {
   constructor(
     gridSize,
     GameKeyboardListener,
-    gameDOMRenderer,
+    GameDOMRenderer,
     LocalStorageSaver
   ) {
     this.gridSize = gridSize;
     this.gameKeyboardListener = new GameKeyboardListener();
-    this.gameDOMRenderer = gameDOMRenderer;
+    this.gameDOMRenderer = new GameDOMRenderer();
     this.localStorageSaver = new LocalStorageSaver();
 
     this.startTiles = 2;
@@ -54,9 +53,20 @@ export class GameManager {
   // Return true if the game is lost, or has won and the user hasn't kept playing
 
   // Set up the initial tiles to start the game with
-  addStartTiles() {}
+  addStartTiles() {
+    for (let i = 0; i < this.startTiles; i++) {
+      this.addRandomTile();
+    }
+  }
   // Adds a tile in a random position
-  addRandomTile() {}
+  addRandomTile() {
+    if (this.grid.cellAvailable()) {
+      let value = Math.random() < 0.9 ? 2 : 4;
+      let tile = new Tile(this.grid.randomAvailableCell(), value);
+
+      this.grid.insertTile(tile);
+    }
+  }
   // Sends the updated grid to the GameDOMRenderer.js
   actuate() {
     GameDOMRenderer.actuate(this.grid, {});
