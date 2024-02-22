@@ -1,1 +1,1 @@
-export function gameDOMRenderer() {}
+export class GameDOMRenderer {}

@@ -1,13 +1,15 @@
+import { Grid } from "./Grid.js";
+
 export class GameManager {
   constructor(
     gridSize,
     GameKeyboardListener,
-    gameDOMRenderer,
+    GameDOMRenderer,
     LocalStorageSaver
   ) {
     this.gridSize = gridSize;
     this.gameKeyboardListener = new GameKeyboardListener();
-    this.gameDOMRenderer = gameDOMRenderer;
+    this.gameDOMRenderer = new GameDOMRenderer();
     this.localStorageSaver = new LocalStorageSaver();
 
     this.startTiles = 2;
@@ -26,7 +28,19 @@ export class GameManager {
     //Check localStorage if previous game present
     if (previousState) {
       this.grid = new Grid(this.gridSize, previousState);
+    } else {
+      this.grid = new Grid(this.gridSize);
+      this.score = 0;
+      this.over = false;
+      this.won = false;
+      this.keepPlaying = false;
+
+      // Add the initial tiles
+      addStartTiles();
     }
+
+    // Update the DOM
+    actuate();
   }
   // Restart the game
   restart() {
@@ -38,17 +52,25 @@ export class GameManager {
   }
   // Return true if the game is lost, or has won and the user hasn't kept playing
 
-  // Set up the game
-  // Reload the game from a previous game if present
-  // Add the initial tiles
-  // Update the DOM
-
   // Set up the initial tiles to start the game with
-
+  addStartTiles() {
+    for (let i = 0; i < this.startTiles; i++) {
+      this.addRandomTile();
+    }
+  }
   // Adds a tile in a random position
+  addRandomTile() {
+    if (this.grid.cellAvailable()) {
+      let value = Math.random() < 0.9 ? 2 : 4;
+      let tile = new Tile(this.grid.randomAvailableCell(), value);
 
-  // Sends the updated grid to the actuator
-
+      this.grid.insertTile(tile);
+    }
+  }
+  // Sends the updated grid to the GameDOMRenderer.js
+  actuate() {
+    GameDOMRenderer.actuate(this.grid, {});
+  }
   // Clear the state when the game is over (game over only, not win)
 
   // Represent the current game as an object
