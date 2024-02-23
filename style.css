@@ -2,6 +2,8 @@
   --background-color: #cdc1b5;
   --border-color: #bbada0;
   --tile-border-color: #bbada0;
+  --tile-size: 107px;
+  --tile-transition: 100ms ease-in-out;
 
   --x2: #eee4da;
   --x4: #ece0ca;
@@ -21,107 +23,380 @@
   --grey-text: #727371;
 }
 
+html,
 body {
+  margin: 0;
+  padding: 0;
   font-family: Arial, Helvetica, sans-serif;
   text-align: center;
 }
 
-hr {
-  width: 500px;
+body {
+  margin: 80px 0;
 }
 
-#board {
-  width: 400px;
-  height: 400px;
+.heading:after {
+  content: "";
+  display: block;
+  clear: both;
+}
 
-  background-color: var(--background-color);
-  border: 6px solid var(--border-color);
-  border-radius: 8px;
+h1.title {
+  font-size: 80px;
+  font-weight: bold;
+  margin: 0;
+  display: block;
+  float: left;
+  color: var(--grey-text);
+}
 
+hr {
+  border: none;
+  border-bottom: 1px solid #d8d4d0;
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+a {
+  color: #776e65;
+  font-weight: bold;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.scores-container {
+  float: right;
+  text-align: right;
+}
+
+.score-container,
+.best-container {
+  position: relative;
+  display: inline-block;
+  background: #bbada0;
+  padding: 15px 25px;
+  font-size: 25px;
+  height: 25px;
+  line-height: 47px;
+  font-weight: bold;
+  border-radius: 3px;
+  color: white;
+  margin-top: 8px;
+  text-align: center;
+}
+.score-container:after,
+.best-container:after {
+  position: absolute;
+  width: 100%;
+  top: 10px;
+  left: 0;
+  text-transform: uppercase;
+  font-size: 13px;
+  line-height: 13px;
+  text-align: center;
+  color: #eee4da;
+}
+.score-container .score-addition,
+.best-container .score-addition {
+  position: absolute;
+  right: 30px;
+  color: red;
+  font-size: 25px;
+  line-height: 25px;
+  font-weight: bold;
+  color: rgba(119, 110, 101, 0.9);
+  z-index: 100;
+  -webkit-animation: move-up 600ms ease-in;
+  -moz-animation: move-up 600ms ease-in;
+  animation: move-up 600ms ease-in;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.score-container:after {
+  content: "Score";
+}
+
+.best-container:after {
+  content: "Best";
+}
+
+.above-game:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.game-intro {
+  float: left;
+  line-height: 42px;
+  margin-bottom: 0;
+}
+
+.restart-button {
+  display: inline-block;
+  background: var(--border-color);
+  border-radius: 3px;
+  padding: 0 20px;
+  text-decoration: none;
+  color: #fff;
+  height: 40px;
+  line-height: 42px;
+  display: block;
+  text-align: center;
+  float: right;
+}
+
+.container {
+  width: 500px;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
+}
+
+.game-container {
+  margin-top: 40px;
+  position: relative;
+  padding: 15px;
+  cursor: default;
+  -webkit-touch-callout: none;
+  -ms-touch-callout: none;
+  -ms-touch-action: none;
+  touch-action: none;
+  background: var(--background-color);
+  border-radius: 16px;
+  width: 500px;
+  height: 500px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.game-container .game-message {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(238, 228, 218, 0.5);
+  z-index: 100;
+  text-align: center;
+  -webkit-animation: fade-in 800ms ease 1200ms;
+  -moz-animation: fade-in 800ms ease 1200ms;
+  animation: fade-in 800ms ease 1200ms;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.grid-container {
+  position: absolute;
+  z-index: 1;
+}
+
+.grid-row {
+  margin-bottom: 15px;
+}
+
+.grid-row:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.grid-cell {
+  width: 106.25px;
+  height: 106.25px;
+  margin-right: 15px;
+  float: left;
+  border-radius: 12px;
+  background: rgba(238, 228, 218, 0.35);
+}
+
+.tile-container {
+  position: absolute;
+  z-index: 2;
 }
 
 .tile {
-  width: 90px;
-  height: 90px;
-  border: 5px solid var(--tile-border-color);
+  transition: 140ms ease-in-out;
+  transition-property: transform;
+}
 
-  font-size: 40px;
+.tile .tile-inner {
+  width: 107px;
+  height: 107px;
+  line-height: 107px;
+}
+
+.tile-new .tile-inner {
+  animation: appear 100ms ease 100ms;
+  animation-fill-mode: backwards;
+}
+
+.tile-merged .tile-inner {
+  z-index: 20;
+  animation: pop 100ms ease 10ms;
+  animation-fill-mode: backwards;
+}
+
+.tile.tile-position-1-1 {
+  transform: translate(0px, 0px);
+}
+.tile.tile-position-1-2 {
+  transform: translate(0px, 121px);
+}
+.tile.tile-position-1-3 {
+  transform: translate(0px, 242px);
+}
+.tile.tile-position-1-4 {
+  transform: translate(0px, 363px);
+}
+.tile.tile-position-2-1 {
+  transform: translate(121px, 0px);
+}
+.tile.tile-position-2-2 {
+  transform: translate(121px, 121px);
+}
+.tile.tile-position-2-3 {
+  transform: translate(121px, 242px);
+}
+.tile.tile-position-2-4 {
+  transform: translate(121px, 363px);
+}
+.tile.tile-position-3-1 {
+  transform: translate(242px, 0px);
+}
+.tile.tile-position-3-2 {
+  transform: translate(242px, 121px);
+}
+.tile.tile-position-3-3 {
+  transform: translate(242px, 242px);
+}
+.tile.tile-position-3-4 {
+  transform: translate(242px, 363px);
+}
+.tile.tile-position-4-1 {
+  transform: translate(363px, 0px);
+}
+.tile.tile-position-4-2 {
+  transform: translate(363px, 121px);
+}
+.tile.tile-position-4-3 {
+  transform: translate(363px, 242px);
+}
+.tile.tile-position-4-4 {
+  transform: translate(363px, 363px);
+}
+
+.tile .tile-inner {
+  position: absolute;
+  width: var(--tile-size);
+  height: var(--tile-size);
+  line-height: var(--tile-size);
+  transition: var(--tile-transition);
+  border-radius: 12px;
+
+  text-align: center;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/*Colored tile*/
-.x2 {
-  background-color: var(--x2);
+  z-index: 10;
+  font-size: 55px;
+  background: var(--tile-bg-2-4);
   color: var(--grey-text);
 }
 
-.x4 {
-  background-color: var(--x4);
-  color: var(--grey-text);
+.tile-merged .tile-inner {
+  z-index: 20;
+  -webkit-animation: pop 200ms ease 100ms;
+  -moz-animation: pop 200ms ease 100ms;
+  animation: pop 200ms ease 100ms;
+  -webkit-animation-fill-mode: backwards;
+  -moz-animation-fill-mode: backwards;
+  animation-fill-mode: backwards;
 }
 
-.x8 {
-  background-color: var(--x8);
-  color: white;
+/* Specific tile backgrounds and colors */
+.tile.tile-2 .tile-inner {
+  background: var(--x2);
+}
+.tile.tile-4 .tile-inner {
+  background: var(--x4);
 }
 
-.x16 {
-  background-color: var(--x16);
-  color: white;
+.tile.tile-8 .tile-inner {
+  background: var(--x8);
+  color: #fff;
 }
 
-.x32 {
-  background-color: var(--x32);
-  color: white;
+.tile.tile-16 .tile-inner {
+  background: var(--x16);
+  color: #fff;
 }
 
-.x64 {
-  background-color: var(--x64);
-  color: white;
+.tile.tile-32 .tile-inner {
+  background: var(--x32);
+  color: #fff;
 }
 
-.x128 {
-  background-color: var(--x128);
-  color: white;
+.tile.tile-64 .tile-inner {
+  background: var(--x64);
+  color: #fff;
 }
 
-.x256 {
-  background-color: var(--x256);
-  color: white;
+.tile.tile-128 .tile-inner {
+  background: var(--x128);
+  color: #fff;
 }
 
-.x512 {
-  background-color: var(--x512);
-  color: white;
+.tile.tile-256 .tile-inner {
+  background: var(--x256);
+  color: #fff;
 }
 
-.x1024 {
-  background-color: var(--x1024);
-  color: white;
+.tile.tile-512 .tile-inner {
+  background: var(--x512);
+  color: #fff;
 }
 
-.x2048 {
-  background-color: var(--x2048);
-  color: white;
+.tile.tile-1024 .tile-inner {
+  font-size: 35px;
+  background: var(--x1024);
+  color: #fff;
 }
 
-.x4096 {
-  background-color: var(--x4096);
-  color: white;
+.tile.tile-2048 .tile-inner {
+  font-size: 35px;
+  background: var(--x2048);
+  color: #fff;
 }
 
-.x8192 {
-  background-color: var(--x8192);
-  color: white;
+.tile.tile-4096 .tile-inner {
+  font-size: 35px;
+  background: var(--x4096);
+  color: #fff;
 }
 
-.x16384 {
-  background-color: var(--x16384);
-  color: white;
+.tile.tile-8192 .tile-inner {
+  font-size: 35px;
+  background: var(--x8192);
+  color: #fff;
+}
+
+.tile.tile-16384 .tile-inner {
+  font-size: 30px;
+  background: var(--x16384);
+  color: #fff;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 520px) {
+  .tile .tile-inner {
+    font-size: 25px; /* Default smaller font size */
+  }
+  .tile.tile-1024 .tile-inner,
+  .tile.tile-2048 .tile-inner {
+    font-size: 15px;
+  }
+  .tile.tile-super .tile-inner {
+    font-size: 10px;
+  }
 }
