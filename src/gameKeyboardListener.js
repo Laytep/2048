@@ -44,11 +44,20 @@ export class GameKeyboardListener {
         this.restart(event);
       }
     });
+
+    this.bindButtonPress(".retry-button", this.restart);
+    this.bindButtonPress(".restart-button", this.restart);
+    this.bindButtonPress(".keep-playing-button", this.keepPlaying);
   }
 
   restart(event) {
     event.preventDefault();
     this.emit("restart");
+  }
+
+  keepPlaying(event) {
+    event.preventDefault();
+    this.emit("keepPlaying");
   }
 
   emit(event, data) {
@@ -58,5 +67,11 @@ export class GameKeyboardListener {
         callback(data);
       });
     }
+  }
+
+  bindButtonPress(selector, fn) {
+    let button = document.querySelector(selector);
+    button.addEventListener("click", fn.bind(this));
+    button.addEventListener(this.eventTouchend, fn.bind(this));
   }
 }

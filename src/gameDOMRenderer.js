@@ -103,6 +103,10 @@ export class GameDOMRenderer {
     this.messageContainer.getElementsByTagName("p")[0].textContent = message;
   }
 
+  continueGame() {
+    this.clearMessage();
+  }
+
   clearMessage() {
     this.messageContainer.classList.remove("game-won");
     this.messageContainer.classList.remove("game-over");

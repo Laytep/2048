@@ -88,7 +88,6 @@ export class GameManager {
       score: this.score,
       over: this.over,
       won: this.won,
-      //write later
       bestScore: 0,
       terminated: this.isGameTerminated(),
     });
@@ -150,6 +149,7 @@ export class GameManager {
 
           if (next && next.value === tile.value && !next.mergedFrom) {
             let merged = new Tile(positions.next, tile.value * 2);
+            this.score += tile.value * 2;
             merged.mergedFrom = [tile, next];
 
             this.grid.insertTile(merged);
