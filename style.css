@@ -63,6 +63,7 @@ a {
   text-decoration: underline;
   cursor: pointer;
 }
+
 .scores-container {
   float: right;
   text-align: right;
@@ -105,11 +106,7 @@ a {
   font-weight: bold;
   color: rgba(119, 110, 101, 0.9);
   z-index: 100;
-  -webkit-animation: move-up 600ms ease-in;
-  -moz-animation: move-up 600ms ease-in;
   animation: move-up 600ms ease-in;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 
@@ -180,12 +177,46 @@ a {
   background: rgba(238, 228, 218, 0.5);
   z-index: 100;
   text-align: center;
-  -webkit-animation: fade-in 800ms ease 1200ms;
-  -moz-animation: fade-in 800ms ease 1200ms;
   animation: fade-in 800ms ease 1200ms;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+
+.game-container .game-message p {
+  font-size: 60px;
+  font-weight: bold;
+  height: 60px;
+  line-height: 60px;
+  margin-top: 222px;
+}
+.game-container .game-message .lower {
+  display: block;
+  margin-top: 59px;
+}
+
+.game-container .game-message a {
+  display: inline-block;
+  background: #8f7a66;
+  border-radius: 3px;
+  padding: 0 20px;
+  text-decoration: none;
+  color: #f9f6f2;
+  height: 40px;
+  line-height: 42px;
+  margin-left: 9px;
+}
+.game-container .game-message a.keep-playing-button {
+  display: none;
+}
+.game-container .game-message.game-won {
+  background: rgba(237, 194, 46, 0.5);
+  color: #f9f6f2;
+}
+.game-container .game-message.game-won a.keep-playing-button {
+  display: inline-block;
+}
+.game-container .game-message.game-won,
+.game-container .game-message.game-over {
+  display: block;
 }
 
 .grid-container {
@@ -306,11 +337,7 @@ a {
 
 .tile-merged .tile-inner {
   z-index: 20;
-  -webkit-animation: pop 200ms ease 100ms;
-  -moz-animation: pop 200ms ease 100ms;
   animation: pop 200ms ease 100ms;
-  -webkit-animation-fill-mode: backwards;
-  -moz-animation-fill-mode: backwards;
   animation-fill-mode: backwards;
 }
 
@@ -398,5 +425,42 @@ a {
   }
   .tile.tile-super .tile-inner {
     font-size: 10px;
+  }
+}
+
+@keyframes move-up {
+  0% {
+    top: 25px;
+    opacity: 1;
+  }
+  100% {
+    top: -50px;
+    opacity: 0;
+  }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
