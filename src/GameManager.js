@@ -84,16 +84,18 @@ export class GameManager {
 
   // Sends the updated grid to the GameDOMRenderer.js
   actuate() {
+    if (this.localStorageSaver.getBestScore() < this.score) {
+      this.localStorageSaver.setBestScore(this.score);
+    }
+
     this.gameDOMRenderer.actuate(this.grid, {
       score: this.score,
       over: this.over,
       won: this.won,
-      bestScore: 0,
+      bestScore: this.localStorageSaver.getBestScore(),
       terminated: this.isGameTerminated(),
     });
   }
-
-  // Clear the state when the game is over (game over only, not win)
 
   // Represent the current game as an object
   serialize() {
@@ -150,6 +152,7 @@ export class GameManager {
           if (next && next.value === tile.value && !next.mergedFrom) {
             let merged = new Tile(positions.next, tile.value * 2);
             this.score += tile.value * 2;
+
             merged.mergedFrom = [tile, next];
 
             this.grid.insertTile(merged);
