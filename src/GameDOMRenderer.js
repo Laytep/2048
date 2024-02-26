@@ -22,6 +22,7 @@ export class GameDOMRenderer {
     });
 
     this.updateScore(metadata.score);
+    console.log(metadata);
     this.updateBestScore(metadata.bestScore);
 
     if (metadata.terminated) {
