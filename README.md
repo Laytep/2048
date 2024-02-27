@@ -1,9 +1,4 @@
 # 2048
-Just a 2048 game!
-
-
-
-# 2048
 Welcome to my implementation of the classic 2048 game! This version comes with a responsive design that adapts to various screen sizes and includes basic functionalities like win/lose detection, and tracking of the best score. Experience the timeless puzzle game with a modern twist.
 
 ![2024-02-2711-49-17-ezgif com-optimize](https://github.com/Laytep/2048/assets/85368712/18454bd1-41d9-44e2-87d1-2bafd0be28df)
